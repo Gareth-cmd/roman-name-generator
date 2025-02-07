@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roman Name Generator</title>
+  <!-- Google Font for a classical Roman feel -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Use a parchment background texture and a classical color scheme */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://www.transparenttextures.com/patterns/old-mathematics.png'), #e9d8a6;
+      font-family: 'Cinzel', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255, 250, 240, 0.95);
+      padding: 20px;
+      border: 3px solid #7c4a30;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      max-width: 90%;
+      width: 500px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #7c4a30;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.1em;
+      color: #7c4a30;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1.2em;
+      width: 100%;
+      border: 2px solid #7c4a30;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .gender-selection {
+      margin-bottom: 10px;
+      font-size: 1em;
+      color: #7c4a30;
+    }
+    .gender-selection label {
+      margin-right: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background: #7c4a30;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #8d5a3c;
+    }
+    #romanName {
+      margin-top: 20px;
+      font-size: 2em;
+      font-weight: bold;
+      color: #7c4a30;
+      min-height: 50px;
+    }
+    a {
+      color: #7c4a30;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Roman Name Generator</h1>
+    <p>Enter your first name:</p>
+    <input type="text" id="firstName" placeholder="Your Name" />
+    <div class="gender-selection">
+      <label>
+        <input type="radio" name="gender" value="male" checked> Male
+      </label>
+      <label>
+        <input type="radio" name="gender" value="female"> Female
+      </label>
+    </div>
+    <button onclick="generateRomanName()">OK</button>
+    <div id="romanName"></div>
+    <p>
+      <a href="https://www.facebook.com/groups/551623001070702" target="_blank">
+        Visit our Facebook Group
+      </a>
+    </p>
+  </div>
+
+  <script>
+    // Generate and display the Roman name when the button is clicked
+    function generateRomanName() {
+      var name = document.getElementById("firstName").value.trim();
+      if (name === "") {
+        alert("Please enter your first name.");
+        return;
+      }
+      var gender = document.querySelector('input[name="gender"]:checked').value;
+      var romanName = getRomanName(name, gender);
+      document.getElementById("romanName").innerText = romanName;
+    }
+
+    // Create a simple hash based on the name to select a consistent Roman name
+    function getRomanName(name, gender) {
+      var sum = 0;
+      name = name.toLowerCase();
+      for (var i = 0; i < name.length; i++) {
+        sum += name.charCodeAt(i);
+      }
+      
+      // Expanded arrays for male names
+      var praenomina_male = ["Gaius", "Lucius", "Marcus", "Titus", "Publius", "Quintus", "Sextus", "Decimus", "Servius", "Spurius"];
+      var nomina_male     = ["Julius", "Cornelius", "Fabius", "Antonius", "Claudius", "Aemilius", "Valerius", "Aurelius", "Flavius", "Octavius"];
+      var cognomina_male  = ["Maximus", "Nobilis", "Magnus", "Fortis", "Victor", "Felix", "Gracchus", "Cicero", "Pius", "Longinus"];
+
+      // Expanded arrays for female names
+      var praenomina_female = ["Julia", "Livia", "Claudia", "Cornelia", "Antonia", "Fabia", "Marcia", "Servilia", "Aemilia", "Valeria"];
+      var nomina_female     = ["Juliana", "Cornelia", "Fabia", "Antonia", "Claudia", "Aemilia", "Valeria", "Aurelia", "Flavia", "Octavia"];
+      var cognomina_female  = ["Maxima", "Nobilis", "Magna", "Fortis", "Victoria", "Felicia", "Gracchia", "Ciceronia", "Pia", "Longina"];
+
+      // Choose the correct arrays based on gender
+      var praenomina, nomina, cognomina;
+      if (gender === "female") {
+        praenomina = praenomina_female;
+        nomina = nomina_female;
+        cognomina = cognomina_female;
+      } else {
+        praenomina = praenomina_male;
+        nomina = nomina_male;
+        cognomina = cognomina_male;
+      }
+      
+      var index1 = sum % praenomina.length;
+      var index2 = (sum * 3) % nomina.length;
+      var index3 = (sum * 7) % cognomina.length;
+      
+      return praenomina[index1] + " " + nomina[index2] + " " + cognomina[index3];
+    }
+  </script>
+</body>
+</html>
